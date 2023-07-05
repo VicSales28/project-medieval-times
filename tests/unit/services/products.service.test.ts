@@ -22,4 +22,16 @@ describe('Testando a camada services ./products', function () {
 
     expect(resultService).to.deep.eq(productWithoutOrderId);
   })
+
+  it('Testando a função findAll', async function () {
+    const allProducts = productMock.allProductsMock;
+
+    const allProductsFound = allProducts.map((product) => ProductsModel.build(product));
+
+    sinon.stub(ProductsModel, 'findAll').resolves(allProductsFound);
+
+    const resultService = await ProductsService.findAll();
+
+    expect(resultService).to.be.deep.equal(allProductsFound);
+  })
 });
