@@ -1,6 +1,10 @@
 import { ProductWithoutOrderId } from '../types/Product';
 
-import ProductModel, { ProductInputtableTypes } from '../database/models/product.model';
+import ProductModel,
+{
+  ProductInputtableTypes,
+  ProductSequelizeModel,
+} from '../database/models/product.model';
 
 async function create(newProduct: ProductInputtableTypes): Promise<ProductWithoutOrderId> {
   const result = await ProductModel.create(newProduct);
@@ -8,6 +12,13 @@ async function create(newProduct: ProductInputtableTypes): Promise<ProductWithou
   return { id, name, price };
 }
 
+async function findAll(): Promise<ProductSequelizeModel[]> {
+  const allProducts = await ProductModel.findAll();
+  console.log(allProducts);
+  return allProducts;
+}
+
 export default {
   create,
+  findAll,
 };
