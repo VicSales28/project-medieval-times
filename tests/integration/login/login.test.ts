@@ -3,6 +3,8 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 
 import app from '../../../src/app';
+import loginMock from '../../mocks/login.mock';
+import UserModel from '../../../src/database/models/user.model';
 
 chai.use(chaiHttp);
 
@@ -40,10 +42,14 @@ describe('POST /login', function () {
   })
 
   it('Será validado que é possível fazer login com sucesso', async function () {
-    const httpResponse = await chai.request(app).post('/login').send({
-      username: 'Hagar',
-      password: 'terrível',
-    });
+    const httpRequest = loginMock.loginReqBodyMock;
+
+    const resultModel = UserModel.build(loginMock.userFoundMock);
+
+    sinon.stub(UserModel, 'findOne').resolves(resultModel);
+
+    const httpResponse = await chai.request(app).post('/login').send(httpRequest);
+
     expect(httpResponse.status).to.equal(200);
     expect(httpResponse.body).to.have.key('token');
   })
